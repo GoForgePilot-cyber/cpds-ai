@@ -1,32 +1,138 @@
 # CPDS-AI Vertical Configuration
-# Update this file once EMIS 2-week signal run identifies the target vertical.
+# Status: PENDING — populate after EMIS 2-week signal run (~2026-06-28)
+#
+# To select a vertical:
+# 1. Review /mnt/d/Projects/emis-exports/digest/ for signal strength
+# 2. Choose from candidates below
+# 3. Uncomment and populate the chosen vertical's config
+# 4. Set status: active
+# 5. Commit and push
 
-vertical:
-  name: "TBD"
-  status: "waiting_for_emis_signal"
-  selected_date: null
+status: pending
+vertical_name: null
 
-  # Fill in once vertical is confirmed
-  target_community: null        # e.g. "r/n8n" or "r/microsaas"
-  substack_slug: null           # e.g. "cpds-n8n"
-  substack_publication_name: null
+# ── Candidate A: n8n Automation Services ───────────────────────────────────
+# EMIS signal: strong recurring — handoff pain, token costs, client billing
+# Audience: freelancers and small agencies building automation for clients
+# Risk: price-sensitive audience, abundant free content
+#
+# vertical_name: n8n_automation_services
+# display_name: "n8n Automation Intelligence"
+# tagline: "What n8n operators are building, billing, and struggling with — weekly"
+#
+# keywords:
+#   - n8n
+#   - workflow automation
+#   - automation agency
+#   - client billing automation
+#   - n8n token cost
+#   - AI automation services
+#
+# subreddits:
+#   - n8n
+#   - automation
+#   - freelance
+#   - SideProject
+#
+# hn_terms:
+#   - n8n
+#   - workflow automation
+#   - automation billing
+#   - agentic workflow
+#
+# github_topics:
+#   - n8n
+#   - n8n-automation
+#   - workflow-automation
+#   - n8n-workflows
+#
+# producthunt_topics:
+#   - workflow-automation
+#   - developer-tools
+#   - productivity
+#
+# forum_urls:
+#   - https://community.n8n.io/latest.json
+#   - https://community.make.com/latest.json
 
-  # EMIS lanes to prioritize for this vertical
-  # Maps to lane names in EMIS config/deep_research_queries.yml
-  emis_lanes: []
+# ── Candidate B: Niche MicroSaaS ───────────────────────────────────────────
+# EMIS signal: consistent — revenue examples, validated buyer archetypes
+# Audience: solo founders and small teams building vertical SaaS
+# Risk: Micro SaaS Idea (Upen) has 40K+ subs — direct incumbent
+#
+# vertical_name: niche_microsaas
+# display_name: "MicroSaaS Demand Signals"
+# tagline: "What niche SaaS buyers actually want — validated by signal, not opinion"
+#
+# keywords:
+#   - micro saas
+#   - microsaas
+#   - niche SaaS
+#   - solo founder
+#   - indie hacker revenue
+#
+# subreddits:
+#   - microsaas
+#   - SideProject
+#   - indiehackers
+#
+# hn_terms:
+#   - micro saas
+#   - solo founder
+#   - bootstrapped SaaS
+#
+# github_topics:
+#   - saas
+#   - micro-saas
+#   - indie-hacker
+#
+# producthunt_topics:
+#   - saas
+#   - productivity
+#   - developer-tools
 
-  # Candidate verticals ranked by EMIS signal strength
-  # Update after reviewing 2 weeks of digest output
-  candidates:
-    - name: "n8n automation services"
-      signal_strength: null
-      community: "r/n8n, r/automation"
-      notes: "Strong recurring signals in run_2 — handoff pain, token costs, client billing"
-    - name: "niche microsaas"
-      signal_strength: null
-      community: "r/microsaas, r/SideProject"
-      notes: "Consistent revenue examples — peptide tracking, language apps"
-    - name: "AI billing infrastructure"
-      signal_strength: null
-      community: "r/SideProject, r/LocalLLaMA"
-      notes: "run_4 91/100 quality — open source billing, compliance tooling"
+# ── Candidate C: AI Billing Infrastructure ─────────────────────────────────
+# EMIS signal: run_4 scored 91/100 — open source commercialization signals
+# Audience: builders monetizing AI tools, APIs, and agents
+# Risk: small TAM (~thousands globally)
+# Upside: buyers have real money, sparse newsletter competition
+#
+# vertical_name: ai_billing_infra
+# display_name: "AI Billing Intelligence"
+# tagline: "Demand signals for builders monetizing AI — billing, pricing, and commercialization"
+#
+# keywords:
+#   - AI billing
+#   - LLM pricing
+#   - AI monetization
+#   - open source commercialization
+#   - usage-based pricing
+#   - AI API billing
+#   - token cost management
+#
+# subreddits:
+#   - LocalLLaMA
+#   - SideProject
+#   - MachineLearning
+#   - artificial
+#
+# hn_terms:
+#   - AI billing
+#   - LLM cost
+#   - usage based pricing
+#   - open source monetization
+#   - AI commercialization
+#
+# github_topics:
+#   - llm-pricing
+#   - ai-monetization
+#   - usage-based-pricing
+#   - open-source-business
+#
+# producthunt_topics:
+#   - artificial-intelligence
+#   - developer-tools
+#   - saas
+#
+# forum_urls:
+#   - https://community.openai.com/latest.json

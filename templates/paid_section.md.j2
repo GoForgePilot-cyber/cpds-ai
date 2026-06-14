@@ -1,0 +1,81 @@
+## Full signal analysis
+
+{{ full_analysis }}
+
+---
+
+## Commercial layer
+
+What buyers are actually spending money on right now:
+
+{{ commercial_layer }}
+
+{% if fiverr_signals %}
+**Fiverr demand signals:**
+{% for gig in fiverr_signals %}
+- {{ gig }}
+{% endfor %}
+{% endif %}
+
+{% if upwork_signals %}
+**Upwork job postings:**
+{% for job in upwork_signals %}
+- {{ job }}
+{% endfor %}
+{% endif %}
+
+{% if hiring_signals %}
+**LinkedIn hiring signals:**
+{% for signal in hiring_signals %}
+- {{ signal }}
+{% endfor %}
+{% endif %}
+
+---
+
+## The specific opportunity this week
+
+{{ specific_opportunity }}
+
+**Why now:** {{ why_now }}
+
+**Who this is for:** {{ who_this_is_for }}
+
+**How to act on it:** {{ how_to_act }}
+
+---
+
+## Launches worth watching
+
+{% for launch in launches_watching %}
+**{{ launch.name }}** — {{ launch.description }}
+{{ launch.editorial_take }}
+{% if launch.url %}→ [{{ launch.url }}]({{ launch.url }}){% endif %}
+
+{% endfor %}
+
+---
+
+## Actionable template this week
+
+{{ actionable_template_intro }}
+
+```
+{{ actionable_template_content }}
+```
+
+{{ actionable_template_usage }}
+
+---
+
+## Next week watch
+
+EMIS is tracking these signals for the next issue:
+
+{% for watch in next_week_watch %}
+- **{{ watch.topic }}** — {{ watch.reason }}
+{% endfor %}
+
+---
+
+*Questions on this week's signals? Reply directly — I read everything.*

@@ -1,0 +1,54 @@
+# {{ issue_title }}
+
+*{{ issue_date }} · Issue #{{ issue_number }}*
+
+---
+
+## Signal snapshot
+
+This week's demand intelligence from {{ signal_count }} sources across HN, GitHub, community forums, and EMIS synthesis.
+
+{% for signal in signal_snapshot %}
+**{{ loop.index }}. {{ signal.title }}**
+{{ signal.context }}
+{% if signal.url %}→ [Source]({{ signal.url }}){% endif %}
+
+{% endfor %}
+
+---
+
+## What's moving
+
+{{ whats_moving_stat }}
+
+{{ whats_moving_context }}
+
+---
+
+## Community pulse
+
+What practitioners are actually saying this week:
+
+{% for quote in community_pulse %}
+> "{{ quote.text }}"
+> — *{{ quote.source }}*
+
+{% endfor %}
+
+---
+
+*Paid subscribers get the full picture below — what these signals mean together, where the real opportunity is this week, and one actionable template they can use immediately.*
+
+*[Subscribe →]({{ subscribe_url }})*
+
+---
+
+## Free resource this week
+
+{{ free_resource_title }}: [{{ free_resource_url }}]({{ free_resource_url }})
+
+{{ free_resource_context }}
+
+---
+
+*CPDS-AI is published weekly. Reply to this email with questions or feedback — I read every reply.*

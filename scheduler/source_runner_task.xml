@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>CPDS-AI: Pull all demand signals from sources. Runs Saturday 9pm. Output: sources/weekly_signals.json</Description>
+    <Author>CPDS-AI</Author>
+  </RegistrationInfo>
+  <Triggers>
+    <WeeklyTrigger>
+      <StartBoundary>2026-06-20T21:00:00</StartBoundary>
+      <ExecutionTimeLimit>PT2H</ExecutionTimeLimit>
+      <Enabled>true</Enabled>
+      <WeeksInterval>1</WeeksInterval>
+      <DaysOfWeek>
+        <Saturday />
+      </DaysOfWeek>
+    </WeeklyTrigger>
+  </Triggers>
+  <Principals>
+    <Principal id="Author">
+      <LogonType>InteractiveToken</LogonType>
+      <RunLevel>LeastPrivilege</RunLevel>
+    </Principal>
+  </Principals>
+  <Settings>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <ExecutionTimeLimit>PT2H</ExecutionTimeLimit>
+    <Priority>7</Priority>
+  </Settings>
+  <Actions Context="Author">
+    <Exec>
+      <Command>C:\Windows\System32\wsl.exe</Command>
+      <Arguments>-e bash -c "cd /mnt/d/Projects/cpds-ai &amp;&amp; ~/venvs/ai-research/bin/python sources/source_runner.py &gt;&gt; logs/scheduler/source_runner_$(date +%Y%m%d).log 2&gt;&amp;1"</Arguments>
+    </Exec>
+  </Actions>
+</Task>
