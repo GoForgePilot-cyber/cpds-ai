@@ -1,0 +1,38 @@
+# CPDS-AI Publishing Configuration
+
+publishing:
+  cadence: "weekly"
+  target_day: "Wednesday"       # mid-week performs best for B2B newsletters
+  target_time: "08:00"          # ET
+
+  format:
+    max_words_layer1: 400       # email preview / above fold
+    max_clusters: 3             # top clusters to feature per issue
+    include_revenue_benchmarks: true
+    include_competitor_products: true
+    include_next_step_cta: true
+
+  curation_criteria:
+    min_evidence_strength: "indirect"   # drop "weak" clusters
+    require_revenue_signal: false       # prefer but not required in v1
+    require_named_product: false        # prefer but not required
+
+  substack:
+    api_base: "https://api.substack.com"
+    # API key in .env as SUBSTACK_API_KEY
+    # Publication ID in .env as SUBSTACK_PUBLICATION_ID
+
+  community_post:
+    # Where to share each issue to drive subscribers
+    # Fill in once vertical is confirmed
+    subreddit: null
+    post_template: |
+      Weekly demand signal digest — {date}
+
+      {layer1_summary}
+
+      Full issue: {substack_url}
+
+      ---
+      I run an automated signal scanner across Reddit, newsletters, and YouTube
+      to surface what builders are actually paying for. Free to subscribe.

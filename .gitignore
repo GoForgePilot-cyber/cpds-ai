@@ -1,0 +1,8 @@
+.env
+content/drafts/
+content/published/
+logs/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store

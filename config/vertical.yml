@@ -1,0 +1,32 @@
+# CPDS-AI Vertical Configuration
+# Update this file once EMIS 2-week signal run identifies the target vertical.
+
+vertical:
+  name: "TBD"
+  status: "waiting_for_emis_signal"
+  selected_date: null
+
+  # Fill in once vertical is confirmed
+  target_community: null        # e.g. "r/n8n" or "r/microsaas"
+  substack_slug: null           # e.g. "cpds-n8n"
+  substack_publication_name: null
+
+  # EMIS lanes to prioritize for this vertical
+  # Maps to lane names in EMIS config/deep_research_queries.yml
+  emis_lanes: []
+
+  # Candidate verticals ranked by EMIS signal strength
+  # Update after reviewing 2 weeks of digest output
+  candidates:
+    - name: "n8n automation services"
+      signal_strength: null
+      community: "r/n8n, r/automation"
+      notes: "Strong recurring signals in run_2 — handoff pain, token costs, client billing"
+    - name: "niche microsaas"
+      signal_strength: null
+      community: "r/microsaas, r/SideProject"
+      notes: "Consistent revenue examples — peptide tracking, language apps"
+    - name: "AI billing infrastructure"
+      signal_strength: null
+      community: "r/SideProject, r/LocalLLaMA"
+      notes: "run_4 91/100 quality — open source billing, compliance tooling"
