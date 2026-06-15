@@ -1,9 +1,11 @@
 """
-Forum source — Discourse forums (n8n community, etc.) + Indie Hackers via Algolia.
-Discourse exposes clean JSON endpoints without auth. IH uses their Algolia backend.
+Forum source — Discourse forums (n8n community, etc.) + Indie Hackers via RSS.
+Discourse exposes clean JSON endpoints without auth.
+IH fetched via RSS feed — Algolia endpoint blocked by WSL DNS on some networks.
 """
 
 import time
+import feedparser
 import requests
 from datetime import datetime, timedelta
 
@@ -47,55 +49,66 @@ def _fetch_discourse_forum(base_url: str, min_replies: int = 3, max_results: int
     return results
 
 
-def _fetch_indie_hackers(keywords: list[str], max_results: int = 10) -> list[dict]:
+def _fetch_indie_hackers_rss(keywords: list[str], max_results: int = 20) -> list[dict]:
     """
-    Fetch Indie Hackers posts matching keywords via their Algolia search backend.
-    IH uses Algolia for search — we POST directly to their index.
+    Fetch Indie Hackers posts via RSS feed and filter by keywords.
+    RSS fallback — avoids Algolia DNS resolution issues on restricted networks.
     """
     results = []
-    cutoff_ts = int((datetime.utcnow() - timedelta(days=30)).timestamp())
+    seen_ids = set()
+    cutoff = datetime.utcnow() - timedelta(days=30)
 
-    for keyword in keywords:
-        try:
-            resp = requests.post(
-                "https://yfqs6uses0-dsn.algolia.net/1/indexes/prod_post_es/query",
-                json={
-                    "query": keyword,
-                    "hitsPerPage": max_results,
-                    "filters": f"createdAt > {cutoff_ts}",
-                    "attributesToRetrieve": ["id", "title", "url", "commentCount", "votes", "createdAt"],
-                },
-                headers={
-                    "X-Algolia-Application-Id": "YFQS6USES0",
-                    "X-Algolia-API-Key": "8b35c26b5f9ba6d13c9f29d4e96bb748",
-                    "Content-Type": "application/json",
-                },
-                timeout=10,
-            )
-            resp.raise_for_status()
+    try:
+        feed = feedparser.parse(
+            "https://www.indiehackers.com/feed.rss",
+            agent="CPDS-AI Signal Collector (newsletter research)",
+        )
 
-            for hit in resp.json().get("hits", []):
-                results.append({
-                    "id": f"ih_{hit.get('id', '')}",
-                    "title": hit.get("title", ""),
-                    "url": f"https://www.indiehackers.com{hit.get('url', '')}",
-                    "score": hit.get("votes", 0) + hit.get("commentCount", 0),
-                    "comments": hit.get("commentCount", 0),
-                    "source": "indie_hackers",
-                    "matched_term": keyword,
-                    "date": datetime.utcfromtimestamp(hit.get("createdAt", 0)).isoformat() if hit.get("createdAt") else "",
-                    "signal_type": "revenue_validation",
-                })
-            time.sleep(0.5)
-        except Exception as e:
-            print(f"[forum_source] IH error for keyword '{keyword}': {e}")
+        for entry in feed.entries[:60]:
+            title = entry.get("title", "")
+            summary = entry.get("summary", "")
+            combined = (title + " " + summary).lower()
+
+            # Filter by keyword match
+            matched = next((kw for kw in keywords if kw.lower() in combined), None)
+            if not matched:
+                continue
+
+            # Date filter
+            published = entry.get("published_parsed")
+            if published:
+                pub_dt = datetime(*published[:6])
+                if pub_dt < cutoff:
+                    continue
+
+            entry_id = f"ih_rss_{entry.get('id', hash(title))}"
+            if entry_id in seen_ids:
+                continue
+            seen_ids.add(entry_id)
+
+            results.append({
+                "id": entry_id,
+                "title": title,
+                "url": entry.get("link", ""),
+                "score": 5,  # RSS has no vote count — flat score, ranked by recency
+                "source": "indie_hackers",
+                "matched_term": matched,
+                "date": datetime(*published[:6]).isoformat() if published else "",
+                "signal_type": "revenue_validation",
+            })
+
+            if len(results) >= max_results:
+                break
+
+    except Exception as e:
+        print(f"[forum_source] IH RSS error: {e}")
 
     return results
 
 
 def fetch(forum_urls: list[str], keywords: list[str], min_replies: int = 3) -> list[dict]:
     """
-    Main entry point. Fetch signals from all configured Discourse forums + Indie Hackers.
+    Main entry point. Fetch signals from all configured Discourse forums + Indie Hackers RSS.
     """
     print("[forum_source] Fetching forum signals...")
     results = []
@@ -107,7 +120,7 @@ def fetch(forum_urls: list[str], keywords: list[str], min_replies: int = 3) -> l
                 seen_ids.add(item["id"])
                 results.append(item)
 
-    for item in _fetch_indie_hackers(keywords):
+    for item in _fetch_indie_hackers_rss(keywords):
         if item["id"] not in seen_ids:
             seen_ids.add(item["id"])
             results.append(item)

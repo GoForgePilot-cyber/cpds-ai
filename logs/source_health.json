@@ -1,0 +1,93 @@
+{
+  "hacker_news": {
+    "runs": [
+      {
+        "timestamp": "2026-06-14T21:53:15.867987",
+        "results": 51,
+        "error": null
+      },
+      {
+        "timestamp": "2026-06-15T01:22:45.005482",
+        "results": 57,
+        "error": null
+      }
+    ],
+    "consecutive_empty": 0
+  },
+  "github": {
+    "runs": [
+      {
+        "timestamp": "2026-06-14T21:53:24.797672",
+        "results": 0,
+        "error": null
+      },
+      {
+        "timestamp": "2026-06-15T01:22:53.953850",
+        "results": 3,
+        "error": null
+      }
+    ],
+    "consecutive_empty": 0
+  },
+  "forum": {
+    "runs": [
+      {
+        "timestamp": "2026-06-14T21:53:26.496670",
+        "results": 10,
+        "error": null
+      },
+      {
+        "timestamp": "2026-06-15T01:22:56.392014",
+        "results": 10,
+        "error": null
+      }
+    ],
+    "consecutive_empty": 0
+  },
+  "google_trends": {
+    "runs": [
+      {
+        "timestamp": "2026-06-14T21:53:47.560268",
+        "results": 20,
+        "error": null
+      },
+      {
+        "timestamp": "2026-06-15T01:23:04.207889",
+        "results": 0,
+        "error": null
+      }
+    ],
+    "consecutive_empty": 1
+  },
+  "devto": {
+    "runs": [
+      {
+        "timestamp": "2026-06-14T21:53:51.268317",
+        "results": 0,
+        "error": null
+      },
+      {
+        "timestamp": "2026-06-15T01:23:07.642507",
+        "results": 0,
+        "error": null
+      }
+    ],
+    "consecutive_empty": 2
+  },
+  "emis_bridge": {
+    "runs": [
+      {
+        "timestamp": "2026-06-14T21:53:51.282936",
+        "results": 0,
+        "error": null
+      },
+      {
+        "timestamp": "2026-06-15T01:23:07.651866",
+        "results": 0,
+        "error": null
+      }
+    ],
+    "consecutive_empty": 2,
+    "alert": "Source has returned 0 results for 2 consecutive runs \u2014 investigate"
+  }
+}
