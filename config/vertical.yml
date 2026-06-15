@@ -136,3 +136,65 @@ vertical_name: null
 #
 # forum_urls:
 #   - https://community.openai.com/latest.json
+
+# ── Candidate D: AI Agent Infrastructure ───────────────────────────────────
+# Signal source: GitHub trending — 10 repos, 2K-16K stars in one week
+# Core pain: token costs, persistent memory, context management
+# Audience: builders and operators running AI agents in production
+# Risk: fast-moving space, audience skews technical
+# Upside: concrete measurable pain, real money, differentiated data source
+#         GitHub trending angle not covered by GritGlean or any known competitor
+#
+# Key repos signaling demand (week of 2026-06-14):
+#   markitdown (Microsoft) +16,400 — clean doc-to-markdown for agent input
+#   headroom +12,000 — 60-95% token compression on tool outputs and logs
+#   supermemory +2,900 — persistent queryable memory engine for agents
+#   codegraph +9,300 — local pre-indexed code knowledge graph
+#   ECC Agent Harness +10,300 — skills, memory, security for Claude/Codex/Cursor
+#
+# Pattern: context is the bottleneck, memory is infrastructure, local-first is winning
+#
+# vertical_name: ai_agent_infra
+# display_name: "AI Agent Infrastructure Signals"
+# tagline: "What's actually moving in AI agent tooling — GitHub, Reddit, and HN weekly"
+#
+# keywords:
+#   - AI agent infrastructure
+#   - LLM memory
+#   - token cost reduction
+#   - context window management
+#   - agent tooling
+#   - persistent agent memory
+#   - local LLM
+#   - agentic workflow
+#
+# subreddits:
+#   - AI_Agents
+#   - LocalLLaMA
+#   - n8n
+#   - MachineLearning
+#   - ClaudeAI
+#
+# hn_terms:
+#   - agent memory
+#   - token cost
+#   - context window
+#   - LLM infrastructure
+#   - agentic
+#
+# github_topics:
+#   - llm-agent
+#   - ai-agent
+#   - agent-memory
+#   - llm-tools
+#   - context-compression
+#
+# github_trending_weekly: true   # primary differentiator — scrape weekly trending AI repos
+#
+# producthunt_topics:
+#   - artificial-intelligence
+#   - developer-tools
+#   - machine-learning
+#
+# forum_urls:
+#   - https://news.ycombinator.com/rss
