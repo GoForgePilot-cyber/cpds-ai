@@ -1,13 +1,14 @@
 """
 curate.py — CPDS-AI core draft generator.
 
-Version: 1.2.0
+Version: 1.3.0
 Last updated: 2026-06-15
 Changelog:
   1.0.0 - 2026-06-15 - Initial release
   1.0.1 - 2026-06-15 - Fixed JSON truncation, added _safe_json_parse, increased max_tokens to 4000
   1.1.0 - 2026-06-15 - Switched to two-post model (free post + paid post separately)
   1.2.0 - 2026-06-15 - Changed title format from "Issue #N — Title" to "Jun 15 · Title"
+  1.3.0 - 2026-06-15 - Removed source attribution from prompts (no HN/GitHub/EMIS references in output)
 
 Reads weekly_signals.json from source_runner output.
 Makes TWO separate Claude API calls:
@@ -15,6 +16,7 @@ Makes TWO separate Claude API calls:
   2. Paid post: prescriptive — what to do about it (sent to paid subscribers only)
 
 Title format: "Jun 15 · [Headline]" — no issue numbers.
+Source attribution: never expose underlying sources (HN, GitHub, Reddit, EMIS) in output.
 """
 
 import os
@@ -133,14 +135,19 @@ Newsletter positioning: {tagline}
 Write the FREE POST for this week. Title format: "{date_abbrev} · [6-8 word headline describing this week's theme]"
 Do NOT use "Issue #" anywhere. The date prefix handles sequencing.
 
+CRITICAL SOURCE RULE: Never mention or reference where signals came from.
+Do NOT name: Hacker News, HN, GitHub, Reddit, forums, EMIS, or any specific platform.
+Quotes are attributed to practitioner roles only — e.g. "— an AI infrastructure founder" or "— a senior ML engineer".
+Signal sources are presented as original intelligence from our engine, not aggregated links.
+
 The free post must:
 - Feel genuinely valuable — not a tease of nothing
 - Describe what's happening, NOT what to do about it (that's the paid post)
-- Include 3 specific signals with concrete context (1-2 sentences each)
+- Include 3 specific signals with concrete context (1-2 sentences each) — no source links
 - Include 1 "what's moving" stat or trend with real numbers where available
-- Include 2-3 practitioner quotes synthesized from signal content — not invented
+- Include 2-3 practitioner quotes attributed to roles, not platforms
 - End with a brief non-apologetic line pointing to the paid post
-- Include 1 genuinely useful free resource relevant to this week's signals
+- Include 1 genuinely useful free resource (URL is fine — that's a deliberate recommendation)
 
 Keep all string values concise — under 200 characters each.
 
@@ -154,12 +161,12 @@ Respond with ONLY valid JSON, no markdown fences, no explanation:
   "issue_title": "{date_abbrev} · [same 6-8 word headline — used for Beehiiv post title]",
   "signal_count": 6,
   "signal_snapshot": [
-    {{"title": "...", "context": "1-2 sentences max", "url": "..."}}
+    {{"title": "...", "context": "1-2 sentences max — no source attribution"}}
   ],
   "whats_moving_stat": "One stat with a number — under 100 chars",
   "whats_moving_context": "1-2 sentences max",
   "community_pulse": [
-    {{"text": "Quote under 150 chars", "source": "HN / Forum / etc"}}
+    {{"text": "Quote under 150 chars", "source": "role-based attribution e.g. 'an AI agency operator' or 'a senior LLM engineer'"}}
   ],
   "paid_post_teaser": "One sentence under 120 chars",
   "free_resource_title": "Resource name",
@@ -187,6 +194,11 @@ Paying readers want actionable intelligence. Deliver the verdict, not summaries.
 This week's theme: {issue_title}
 
 The free post covered what signals appeared. Your job: synthesize what they mean and deliver one specific opportunity.
+
+CRITICAL SOURCE RULE: Never mention where signals came from.
+Do NOT name: Hacker News, HN, GitHub, Reddit, forums, EMIS, or any specific platform.
+All intelligence is presented as original analysis from our signal engine.
+Quotes attributed to practitioner roles only — not to specific platforms or threads.
 
 This week's signals:
 {signals_summary}
@@ -246,14 +258,13 @@ def _get_issue_number() -> int:
 
 def run():
     print(f"\n{'='*60}")
-    print(f"CPDS-AI curate.py v1.2.0 — {datetime.utcnow().isoformat()}")
+    print(f"CPDS-AI curate.py v1.3.0 — {datetime.utcnow().isoformat()}")
     print(f"{'='*60}\n")
 
     now = datetime.utcnow()
     signals_data = _load_signals()
     vertical = _load_vertical()
     signals = signals_data.get("signals", [])
-    issue_num = _get_issue_number()
 
     if not signals:
         print("No signals found in weekly_signals.json — run source_runner.py first")
@@ -275,7 +286,6 @@ def run():
 
     free_md, paid_md = _render_templates(free_data, paid_data)
 
-    # Save local drafts with date-only filenames — no issue numbers
     date_str = now.strftime("%Y-%m-%d")
     free_path = DRAFTS_DIR / f"{date_str}_free.md"
     paid_path = DRAFTS_DIR / f"{date_str}_paid.md"

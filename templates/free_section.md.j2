@@ -1,21 +1,21 @@
 {# free_section.md.j2 #}
-{# Version: 1.1.0 #}
+{# Version: 1.2.0 #}
 {# Last updated: 2026-06-15 #}
 {# Changelog: #}
 {#   1.0.0 - 2026-06-15 - Initial release #}
 {#   1.1.0 - 2026-06-15 - Changed issue identifier from "Issue #N" to abbreviated date format (Jun 15) #}
+{#   1.2.0 - 2026-06-15 - Removed source attribution (HN, GitHub, EMIS) — replaced with neutral "signal engine" language #}
 # {{ issue_date_abbrev }} · {{ issue_headline }}
 
 ---
 
 ## Signal snapshot
 
-This week's demand intelligence from {{ signal_count }} sources across HN, GitHub, community forums, and EMIS synthesis.
+This week's demand intelligence from our signal engine.
 
 {% for signal in signal_snapshot %}
 **{{ loop.index }}. {{ signal.title }}**
 {{ signal.context }}
-{% if signal.url %}→ [Source]({{ signal.url }}){% endif %}
 
 {% endfor %}
 
@@ -31,7 +31,7 @@ This week's demand intelligence from {{ signal_count }} sources across HN, GitHu
 
 ## Community pulse
 
-What practitioners are actually saying this week:
+What practitioners are saying this week:
 
 {% for quote in community_pulse %}
 > "{{ quote.text }}"
