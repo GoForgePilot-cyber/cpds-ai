@@ -1,7 +1,7 @@
 """
 curate.py — CPDS-AI core draft generator.
 
-Version: 1.3.0
+Version: 1.4.0
 Last updated: 2026-06-15
 Changelog:
   1.0.0 - 2026-06-15 - Initial release
@@ -9,6 +9,7 @@ Changelog:
   1.1.0 - 2026-06-15 - Switched to two-post model (free post + paid post separately)
   1.2.0 - 2026-06-15 - Changed title format from "Issue #N — Title" to "Jun 15 · Title"
   1.3.0 - 2026-06-15 - Removed source attribution from prompts (no HN/GitHub/EMIS references in output)
+  1.4.0 - 2026-06-15 - Branded source attribution as "CPDS Intelligence Network"
 
 Reads weekly_signals.json from source_runner output.
 Makes TWO separate Claude API calls:
@@ -16,7 +17,7 @@ Makes TWO separate Claude API calls:
   2. Paid post: prescriptive — what to do about it (sent to paid subscribers only)
 
 Title format: "Jun 15 · [Headline]" — no issue numbers.
-Source attribution: never expose underlying sources (HN, GitHub, Reddit, EMIS) in output.
+Source attribution: always "CPDS Intelligence Network" — never expose underlying sources.
 """
 
 import os
@@ -48,6 +49,7 @@ CLIENT = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 MODEL = "claude-sonnet-4-6"
 
 SUBSCRIBE_URL = "https://your-newsletter.beehiiv.com/subscribe"
+BRAND_SOURCE = "CPDS Intelligence Network"
 
 
 def _date_abbrev(dt: datetime) -> str:
@@ -135,10 +137,11 @@ Newsletter positioning: {tagline}
 Write the FREE POST for this week. Title format: "{date_abbrev} · [6-8 word headline describing this week's theme]"
 Do NOT use "Issue #" anywhere. The date prefix handles sequencing.
 
-CRITICAL SOURCE RULE: Never mention or reference where signals came from.
+CRITICAL SOURCE RULE: Never mention where signals came from.
 Do NOT name: Hacker News, HN, GitHub, Reddit, forums, EMIS, or any specific platform.
-Quotes are attributed to practitioner roles only — e.g. "— an AI infrastructure founder" or "— a senior ML engineer".
-Signal sources are presented as original intelligence from our engine, not aggregated links.
+All intelligence is sourced from the "{BRAND_SOURCE}" — present it as original analysis.
+Quotes are attributed to practitioner roles only — e.g. "an AI infrastructure founder" or "a senior ML engineer".
+Signal items have no source links — they are presented as our own intelligence.
 
 The free post must:
 - Feel genuinely valuable — not a tease of nothing
@@ -166,7 +169,7 @@ Respond with ONLY valid JSON, no markdown fences, no explanation:
   "whats_moving_stat": "One stat with a number — under 100 chars",
   "whats_moving_context": "1-2 sentences max",
   "community_pulse": [
-    {{"text": "Quote under 150 chars", "source": "role-based attribution e.g. 'an AI agency operator' or 'a senior LLM engineer'"}}
+    {{"text": "Quote under 150 chars", "source": "role only — e.g. 'an AI agency operator' or 'a senior LLM engineer'"}}
   ],
   "paid_post_teaser": "One sentence under 120 chars",
   "free_resource_title": "Resource name",
@@ -197,7 +200,7 @@ The free post covered what signals appeared. Your job: synthesize what they mean
 
 CRITICAL SOURCE RULE: Never mention where signals came from.
 Do NOT name: Hacker News, HN, GitHub, Reddit, forums, EMIS, or any specific platform.
-All intelligence is presented as original analysis from our signal engine.
+All intelligence is presented as original analysis from the "{BRAND_SOURCE}".
 Quotes attributed to practitioner roles only — not to specific platforms or threads.
 
 This week's signals:
@@ -251,14 +254,9 @@ def _render_templates(free_data: dict, paid_data: dict) -> tuple[str, str]:
     return free_md, paid_md
 
 
-def _get_issue_number() -> int:
-    existing = list(DRAFTS_DIR.glob("????-??-??_*_free.md"))
-    return len(existing) + 1
-
-
 def run():
     print(f"\n{'='*60}")
-    print(f"CPDS-AI curate.py v1.3.0 — {datetime.utcnow().isoformat()}")
+    print(f"CPDS-AI curate.py v1.4.0 — {datetime.utcnow().isoformat()}")
     print(f"{'='*60}\n")
 
     now = datetime.utcnow()
