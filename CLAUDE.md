@@ -221,6 +221,48 @@ These are not targets — they are triggers to stop or pivot:
 
 ---
 
+## LLM Provider Switching
+
+All LLM calls in CPDS-AI must use the provider abstraction established in EMIS.
+Non-negotiable — applies to all new scripts and future projects.
+
+| Provider | Model | Cost | Use |
+|---|---|---|---|
+| `cerebras` | gpt-oss-120b | Free (1M tok/day) | Dev/test default |
+| `groq` | llama-3.3-70b-versatile | Free tier | Dev/test |
+| `ollama` | qwen2.5:7b (JSON) / gemma3:12b (research) | Free (local GPU) | Offline |
+| `anthropic` | claude-sonnet-4-20250514 | Paid | Production quality |
+
+**Pattern for any new LLM call:**
+```python
+from shared.llm_client import LLMClient  # shared/ from EMIS — or port to cpds-ai/shared/
+provider = os.getenv("LLM_PROVIDER", "cerebras")  # default to free
+client = LLMClient(provider=provider)
+```
+
+**CLI flag on any script that calls LLM:**
+```bash
+python scripts/curate.py --provider cerebras   # free
+python scripts/curate.py --provider anthropic  # production quality
+```
+
+**Env var (applies to all scripts without flag):**
+```
+LLM_PROVIDER=cerebras  # in .env
+```
+
+**Cerebras model note:** Model catalog changes frequently.
+Always verify at https://inference-docs.cerebras.ai/models/overview before use.
+Current production model: `gpt-oss-120b` (as of 2026-06-15)
+
+**Quality expectation:**
+- Anthropic: 83-91/100 quality score on EMIS synthesis
+- Cerebras: 66/100 on EMIS synthesis (no web search, Reddit-only input)
+- For CPDS-AI curation (structured formatting, not open-ended research): Cerebras adequate
+- For production issues sent to subscribers: evaluate quality before committing to Cerebras only
+
+---
+
 ## Session End Protocol
 
 1. Update phase table in this CLAUDE.md
